@@ -26,8 +26,6 @@ ListArray<T>::~ListArray( )
 {
     delete[] this->data;
     this->data  = NULL;
-
-    this->size = this->cursor = this->actual = 0;
 }
 
 bool ListArray<T>::insertBefore( const T& value )
@@ -104,15 +102,15 @@ bool ListArray<T>::remove( T& value )
 
         if( this->actual == 0; ) // check if empty
         {
-            cursor = -1;
+            cursor = -1; // set cursor to 'empty' state
         }
         else if( this->cursor == this->actual ) // check if last element removed
         {
-            this->cursor = 0;
+            this->cursor = 0; // set cursor to front
         }
         else // all other cases
         {
-            ;
+            ; // cursor should be in the same position
         }
         return true;
     }
@@ -211,13 +209,43 @@ bool isFull( ) const
     }
 }
 
-ListArray<T>& operator = ( const ListArray<T>& )
+ListArray<T>& ListArray<T>::operator = ( const ListArray<T>& copy )
+{
+    if( this == &copy )
+    {
+        ;
+    }
+    else 
+    {
+        if( this->size != copy.size )
+        {
+            delete[] this->data;
+            this->size = copy.size;
+            this->data = new T[ this->size ];
+        }
+        this->cursor = copy.cursor;
+        this->actual = copy.actual;
 
-friend ostream& operator << (ostream&, const ListArray<S>&);
+        this->data = new T[ this->size ];
 
-private:
-    T *data;
-    int cursor;
-    int actual;
-    int size;
-};
+        for( int i= 0; i < this->actual; i++ )
+            this->data[ i ] = copy.data[ i ];
+    }
+
+    return *this;
+}
+
+ostream& operator << ( ostream& out, const ListArray<S>& source )
+{
+    if( source.isEmpty( ) )
+    {
+        ;
+    }
+    else
+    {
+        for( int i = 0; i < this->actual; i++ )
+            out << this->data[ i ];
+    }
+
+    return out;
+}
