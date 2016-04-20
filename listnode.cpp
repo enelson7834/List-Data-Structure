@@ -2,27 +2,50 @@
 using namespace std;
 
 
-Node( int value, Node* nxt )
+Node::Node( int value, Node* nxt )
 {
     this->data = value;
     this->next = nxt;
 }
 
-ListNode( int a )
+ListNode::ListNode( int a )
 {
     this->head = this->cursor = NULL;
 }
-ListNode( const ListNode& );
-~ListNode();
 
-bool insertAfter(int);
+ListNode::ListNode( const ListNode& copy )
+{
+
+}
+
+ListNode::~ListNode( )
+{
+
+}
+
+bool ListNode::insertAfter( int a )
+{
+
+}
+
 bool insertBefore(int);
 bool get(int&) const;
 bool remove(int&);
 
 void clear();
 
-bool goToBeginning();
+bool goToBeginning( )
+{
+	if( this->isEmpty( ) )
+	{
+		return false;
+	}
+	else
+	{
+		this->cursor = this->head;
+	}
+}
+
 bool goToEnd();
 
 bool goToNext();
