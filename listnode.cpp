@@ -15,7 +15,24 @@ ListNode::ListNode( int a )
 
 ListNode::ListNode( const ListNode& copy )
 {
+	if( copy.isEmpty( ) )
+	{
+		this->cursor = this->head = NULL;
+	}
+	else
+	{
+		Node* tempCopy = copy.head;
+		Node* tempThis = new Node( tempCopy->data, NULL );
+		this->head = tempThis;
 
+		tempCopy = tempCopy->next;
+		tempThis = tempThis->next;
+
+		while( tempCopy != NULL )
+		{
+			tempThis = new Node( tempCopy->data, NULL );
+		}
+	}
 }
 
 ListNode::~ListNode( )
@@ -95,15 +112,18 @@ bool ListNode::remove( int& a )
 
 		Node* temp1 = this->cursor->next;
 		Node* temp2 = this->cursor;
-		this->goToPrior( );
 
-		delete temp2;
-		temp2 = NULL;
+		if( this->cursor == this->head )
+		{
+			this->head = temp1;
+		}
+		else
+		{
+			this->goToPrior( );
+			this->cursor->next = temp1;
+		}
 
-		this->cursor->next = temp1;
-		temp1 = NULL;
-
-		if( this->cursor->next == NULL )
+		if( temp1 == NULL )
 		{
 			this->cursor = this->head;
 		}
@@ -112,11 +132,14 @@ bool ListNode::remove( int& a )
 			this->cursor = this->cursor->next;
 		}
 
+		delete temp2;
+		temp2 = temp1 = NULL;
+
 		return true;
 	}
 }
 
-void ListNode::clear();
+void ListNode::clear( );
 
 bool ListNode::goToBeginning( )
 {
