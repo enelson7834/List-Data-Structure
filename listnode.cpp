@@ -1,4 +1,5 @@
 #include <iostream>
+#include "listnode.h"
 using namespace std;
 
 
@@ -25,19 +26,38 @@ ListNode::ListNode( const ListNode& copy )
 		Node* tempThis = new Node( tempCopy->data, NULL );
 		this->head = tempThis;
 
+		if( copy.cursor == tempCopy )
+		{
+			this->cursor = tempThis;
+		}
+
+		Node* temp = tempThis;
+
 		tempCopy = tempCopy->next;
 		tempThis = tempThis->next;
+
 
 		while( tempCopy != NULL )
 		{
 			tempThis = new Node( tempCopy->data, NULL );
+			temp->next = tempThis;
+
+			temp = temp->next;
+
+			if( copy.cursor == tempCopy )
+			{
+				this->cursor = tempThis;
+			}
+
+			tempCopy = tempCopy->next;
+			tempThis = tempThis->next;
 		}
 	}
 }
 
 ListNode::~ListNode( )
 {
-
+	this->clear( );
 }
 
 bool ListNode::insertAfter( int a )
@@ -48,6 +68,7 @@ bool ListNode::insertAfter( int a )
 	{
 		this->head = this->cursor = temp;
 
+		temp = NULL;
 		return true;
 	}
 	else
@@ -57,31 +78,32 @@ bool ListNode::insertAfter( int a )
 		this->cursor->next = temp;
 		this->cursor = temp;
 
+		temp = NULL;
 		return true;
 	}
 }
 
 bool ListNode::insertBefore( int a )
 {
-	Node* temp = new Node( a, this->cursor );
-
 	if( this->isEmpty( ) )
 	{
-		this->head = this->cursor = temp;
+		this->head = new Node( a, NULL );
+		this->cursor = this->head;
 		return true;
 	}
 	else
 	{
-		temp = this->cursor->data;
+		Node* temp = new Node( this->cursor->data, this->cursor->next );
+
+		this->cursor->next = temp;
 
 		this->cursor->data = a;
-		if( this->cursor == this->head )
+		if( this->head == temp )
 		{
-			this->head = temp;
+			this->head = this->cursor;
 		}
 
-		this->cursor = temp;
-
+		temp = NULL;
 		return true;
 	}
 
@@ -139,7 +161,27 @@ bool ListNode::remove( int& a )
 	}
 }
 
-void ListNode::clear( );
+void ListNode::clear( )
+{
+	if( this->isEmpty( ) )
+	{
+		return;
+	}
+
+	Node* temp1 = this->head;
+	Node* temp2 = this->head->next;
+
+	while( temp2 != NULL )
+	{
+		delete temp1;
+		temp1 = temp2;
+
+		temp2 = temp2->next;
+	}
+	delete temp1;
+
+	this->head = this->cursor = temp1 = temp2 = NULL;
+}
 
 bool ListNode::goToBeginning( )
 {
@@ -218,13 +260,78 @@ bool ListNode::isEmpty( ) const
 	}
 }
 
-bool ListNode::isFull() const;
+bool ListNode::isFull( ) const
+{
+	return false;
+}
 
-ListNode& operator = (const ListNode&);
+ListNode& ListNode::operator = ( const ListNode& copy )
+{
+	if( this == &copy )
+	{
+		return *this;
+	}
 
-friend ostream& operator << (ostream&, const ListNode&);
+	this->clear( );
 
-private:
-    Node *head;
-    Node *cursor;
-};
+	if( copy.isEmpty( ) )
+	{
+		this->cursor = this->head = NULL;
+	}
+	else
+	{
+		Node* tempCopy = copy.head;
+		Node* tempThis = new Node( tempCopy->data, NULL );
+		this->head = tempThis;
+
+		if( copy.cursor == tempCopy )
+		{
+			this->cursor = tempThis;
+		}
+
+		Node* temp = tempThis;
+
+		tempCopy = tempCopy->next;
+		tempThis = tempThis->next;
+
+
+		while( tempCopy != NULL )
+		{
+			tempThis = new Node( tempCopy->data, NULL );
+			temp->next = tempThis;
+
+			temp = temp->next;
+
+			if( copy.cursor == tempCopy )
+			{
+				this->cursor = tempThis;
+			}
+
+			tempCopy = tempCopy->next;
+			tempThis = tempThis->next;
+		}
+	}
+
+	return *this;
+}
+ 
+ostream& operator << ( ostream& out, const ListNode& source )
+{
+	if( source.isEmpty( ) )
+	{
+		return out;
+	}
+	else
+	{
+		Node* temp = source.head;
+		while( temp != NULL )
+		{
+			out << temp->data;
+			out << " ";
+			temp = temp->next;
+		}
+
+		return out;
+	}
+}
+

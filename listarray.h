@@ -37,7 +37,7 @@ private:
 };
 
 template <typename T>
-ListArray<T>::ListArray( int = a )
+ListArray<T>::ListArray( int a )
 {
     this->size = a;
     this->cursor = -1;
@@ -142,7 +142,7 @@ bool ListArray<T>::remove( T& value )
         for( int i = this->cursor; i < this->actual; i++ )
             this->data[ i ] = this->data[ i + 1 ];
 
-        if( this->actual == 0; ) // check if empty
+        if( this->actual == 0 ) // check if empty
         {
             cursor = -1; // set cursor to 'empty' state
         }
@@ -248,7 +248,7 @@ bool ListArray<T>::isEmpty( ) const
 template <typename T>
 bool ListArray<T>::isFull( ) const
 {
-    if( this->actual == this-size )
+    if( this->actual == this->size )
     {
         return true;
     }
@@ -286,7 +286,7 @@ ListArray<T>& ListArray<T>::operator = ( const ListArray<T>& copy )
 }
 
 template <typename T>
-ostream& operator << ( ostream& out, const ListArray<S>& source )
+ostream& operator << ( ostream& out, const ListArray<T>& source )
 {
     if( source.isEmpty( ) )
     {
@@ -294,8 +294,11 @@ ostream& operator << ( ostream& out, const ListArray<S>& source )
     }
     else
     {
-        for( int i = 0; i < this->actual; i++ )
-            out << this->data[ i ];
+        for( int i = 0; i < source.actual; i++ )
+        {
+            out << source.data[ i ];
+            out << " ";
+        }
     }
 
     return out;
