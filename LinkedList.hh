@@ -10,7 +10,6 @@ LinkedList ADT and their paramaters/functions.*/
 #ifndef linked_list_h
 #define linked_list_h
 
-#include <iostream>
 #include "Node.hh"
 
 template <class ItemType>
