@@ -27,7 +27,7 @@ class Node
 		@pre None.
 		@post The item of the Node will be set to the specified value.
 		@param anItem The item that will be set in the Node.*/
-		void SetEntry(const ItemType& anItem)			
+		void SetItem(const ItemType& anItem)			
 		{ aItem = anItem; }
 
 		/** Sets the next pointer of the Node.
@@ -41,7 +41,7 @@ class Node
 		@pre None.
 		@post Item in Node will be returned.
 		@return The item in the Node.*/
-		ItemType GetEntry()			
+		ItemType GetItem()			
 		{ return aItem; }
 
 		/** Returns the pointer to the next Node.
